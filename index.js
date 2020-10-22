@@ -104,7 +104,17 @@ const getItemIdFromElement = function (item) {
     .data('item-id');
 };
 
-const handleNameChange
+const handleNameChange = function(id) {
+  const foundItem = store.items.find(item => item.id === id);
+  foundItem.edit = true;
+};
+
+const handleNameSubmit = function(id) {
+  const foundItem = store.items.find(item => item.id === id);
+  let val = $("#newname").val();
+  foundItem.name = val;
+  foundItem.edit = false;
+}
 
 /**
  * Responsible for deleting a list item.
@@ -138,6 +148,22 @@ const handleDeleteItemClicked = function () {
   });
 };
 
+const handleEditItemClicked = function() {
+  $('.js-shopping-list').on('click', '#edit', function(event) {
+    const id = getItemIdFromElement(event.currentTarget);
+    handleNameChange(id);
+    render();
+  });
+}
+
+const handleSubmitItemClicked = function() {
+  $('.js-shopping-list').on('click', '#submit', function(event) {
+    const id = getItemIdFromElement(event.currentTarget);
+    handleNameSubmit(id);
+    render();
+  })
+};
+
 /**
  * Toggles the store.hideCheckedItems property
  */
@@ -154,7 +180,7 @@ const handleToggleFilterClick = function () {
     toggleCheckedItemsFilter();
     render();
   });
-};
+}
 
 /**
  * This function will be our callback when the
