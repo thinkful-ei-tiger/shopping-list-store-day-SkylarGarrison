@@ -1,9 +1,9 @@
 const store = {
   items: [
-    { id: cuid(), name: 'apples', checked: false },
-    { id: cuid(), name: 'oranges', checked: false },
-    { id: cuid(), name: 'milk', checked: true },
-    { id: cuid(), name: 'bread', checked: false }
+    { id: cuid(), name: 'apples', checked: false, edit: false },
+    { id: cuid(), name: 'oranges', checked: false, edit: false  },
+    { id: cuid(), name: 'milk', checked: true, edit: false  },
+    { id: cuid(), name: 'bread', checked: false, edit: false  }
   ],
   hideCheckedItems: false
 };
@@ -16,9 +16,16 @@ const generateItemElement = function (item) {
     `;
   }
 
+  let changeOption = "";
+  if(item.edit) {
+    newName = "";
+    changeOption = `<label for="newname">Change item name</label>
+    <input type="text" id="newname" name="newname" value="${item.name}>`
+  }
+
   return `
     <li class='js-item-element' data-item-id='${item.id}'>
-      ${itemTitle}
+      ${itemTitle}${changeOption}
       <div class='shopping-item-controls'>
         <button class='shopping-item-toggle js-item-toggle'>
           <span class='button-label'>check</span>
@@ -26,7 +33,9 @@ const generateItemElement = function (item) {
         <button class='shopping-item-delete js-item-delete'>
           <span class='button-label'>delete</span>
         </button>
-      </div>
+
+        ${item.edit ? '<button id="submit">Submit</button>' : '<button id="edit">Change Name</button>'}
+      
     </li>`;
 };
 
@@ -63,7 +72,7 @@ const render = function () {
 };
 
 const addItemToShoppingList = function (itemName) {
-  store.items.push({ id: cuid(), name: itemName, checked: false });
+  store.items.push({ id: cuid(), name: itemName, checked: false, edit: false });
 };
 
 const handleNewItemSubmit = function () {
@@ -94,6 +103,8 @@ const getItemIdFromElement = function (item) {
     .closest('.js-item-element')
     .data('item-id');
 };
+
+const handleNameChange
 
 /**
  * Responsible for deleting a list item.
